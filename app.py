@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect
 from pymongo import MongoClient
 from datetime import datetime
+from flask import Response
 
 app = Flask(__name__)
 
@@ -30,6 +31,15 @@ def index():
 @app.route("/confirmado")
 def confirmado():
     return render_template("confirmado.html")
+
+@app.route("/admin")
+def admin():
+    senha = request.args.get("senha")
+    if senha != os.environ.get("ADMIN_PASS", "admin123"):
+        return Response("Acesso negado", status=401)
+
+    convidados = list(collection.find({}, {"_id": 0}))
+    return render_template("admin.html", convidados=convidados)
 
 if __name__ == "__main__":
     app.run(debug=True)
