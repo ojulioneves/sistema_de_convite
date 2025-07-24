@@ -12,10 +12,6 @@
   <div class="container mt-4 text-center">
     <img src="{{ url_for('static', filename='Roda_de.png') }}" class="img-fluid rounded shadow mb-4" alt="Convite">
 
-    {% if confirmado %}
-    <div class="alert alert-success">Presença confirmada com sucesso!</div>
-    {% endif %}
-
     <form method="POST" class="bg-white p-4 rounded shadow mx-auto" style="max-width: 400px;">
       <div class="mb-3">
         <label for="nome" class="form-label">Seu nome</label>

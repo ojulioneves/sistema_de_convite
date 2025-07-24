@@ -5,7 +5,6 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# Conexão com MongoDB Atlas (Render usa variável de ambiente)
 MONGO_URI = os.environ.get("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client["evento"]
@@ -24,10 +23,14 @@ def index():
                 "acompanhantes": int(acompanhantes),
                 "confirmado_em": datetime.now()
             })
-            return redirect("/?confirmado=true")
+            return redirect("/confirmado")
 
-    confirmado = request.args.get("confirmado")
-    return render_template("index.html", confirmado=confirmado)
+    return render_template("index.html")
+
+@app.route("/confirmado")
+def confirmado():
+    return render_template("confirmado.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
+
