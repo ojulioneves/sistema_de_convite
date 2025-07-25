@@ -39,7 +39,8 @@ def admin():
         return Response("Acesso negado", status=401)
 
     convidados = list(collection.find({}, {"_id": 0}))
-    return render_template("admin.html", convidados=convidados)
+    total_confirmados = sum(1 + int(c.get("acompanhantes", 0)) for c in convidados)
+    return render_template("admin.html", convidados=convidados, total=total_confirmados)
 
 if __name__ == "__main__":
     app.run(debug=True)
