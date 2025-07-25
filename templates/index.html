@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Confirmação de Presença</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <meta property="og:title" content="Clique no Link para confirmar sua presença no meu Aniversário"/>
+  <meta property="og:title" content="Clique no Link para confirmar sua presença no meu Aniversário" />
   <meta property="og:description" content="Vem comemorar os meus 60tão com muita cerveja!" />
   <meta property="og:url" content="https://juca.onrender.com" />
   <meta property="og:image" content="https://juca.onrender.com/static/og_image.png" />
@@ -27,23 +27,22 @@
   </style>
 </head>
 <body class="bg-light">
-
   <div class="container mt-4 text-center">
-    <img src="{{ url_for('static', filename='convite_att.png') }}" class="img-fluid rounded shadow mb-4" alt="Convite">
+    <img src="{{ url_for('static', filename='convite_att.png') }}" class="img-fluid rounded shadow mb-4" alt="Convite" />
 
     <form method="POST" class="bg-white p-4 rounded shadow mx-auto" style="max-width: 400px;">
       <div class="mb-3">
         <label for="nome" class="form-label">Seu nome</label>
-        <input type="text" class="form-control" id="nome" name="nome" required>
+        <input type="text" class="form-control" id="nome" name="nome" required />
       </div>
 
       <div class="mb-3">
         <label for="acompanhantes" class="form-label">Quantos acompanhantes?</label>
-        <input type="number" class="form-control" id="acompanhantes" name="acompanhantes" min="0" required>
+        <input type="number" class="form-control" id="acompanhantes" name="acompanhantes" min="0" required />
       </div>
 
       <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="confirmacao" name="confirmacao" value="sim" required>
+        <input type="checkbox" class="form-check-input" id="confirmacao" name="confirmacao" value="sim" required />
         <label class="form-check-label" for="confirmacao">Confirmo minha presença</label>
       </div>
 
@@ -53,50 +52,46 @@
     <div id="map"></div>
     <div class="distance-info" id="distance-info">Calculando distância...</div>
 
-    <a href="https://maps.app.goo.gl/FUZ2KFJRnWFp1Sok6" target="_blank" class="btn btn-outline-primary mt-2">
-      📍 Abrir no Google Maps
-    </a>
+    <div class="mt-3">
+      <a href="https://maps.app.goo.gl/FUZ2KFJRnWFp1Sok6" target="_blank" class="btn btn-outline-primary">
+        📍 Abrir no Google Maps
+      </a>
+      <a href="https://waze.com/ul?ll=-22.788256628824712,-43.39565625245985&navigate=yes" target="_blank" class="btn btn-outline-success ms-2">
+        🚗 Ir com Waze
+      </a>
+    </div>
   </div>
 
   <script>
     function initMap() {
-      const localFesta = { lat: -22.788256628824712, lng : -43.39565625245985 };
+      const localFesta = { lat: -22.788256628824712, lng: -43.39565625245985 };
 
       const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 17,
         center: localFesta,
         styles: [
+          { elementType: "geometry", stylers: [{ color: "#1d2c4d" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#8ec3b9" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#1a3646" }] },
           {
-            "elementType": "geometry",
-            "stylers": [{ "color": "#1d2c4d" }]
+            featureType: "administrative.country",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#4b6878" }]
           },
           {
-            "elementType": "labels.text.fill",
-            "stylers": [{ "color": "#8ec3b9" }]
+            featureType: "poi",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#94a5a6" }]
           },
           {
-            "elementType": "labels.text.stroke",
-            "stylers": [{ "color": "#1a3646" }]
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ color: "#304a7d" }]
           },
           {
-            "featureType": "administrative.country",
-            "elementType": "geometry.stroke",
-            "stylers": [{ "color": "#4b6878" }]
-          },
-          {
-            "featureType": "poi",
-            "elementType": "labels.text.fill",
-            "stylers": [{ "color": "#94a5a6" }]
-          },
-          {
-            "featureType": "road",
-            "elementType": "geometry",
-            "stylers": [{ "color": "#304a7d" }]
-          },
-          {
-            "featureType": "water",
-            "elementType": "geometry",
-            "stylers": [{ "color": "#0e1626" }]
+            featureType: "water",
+            elementType: "geometry",
+            stylers: [{ color: "#0e1626" }]
           }
         ]
       });
@@ -107,10 +102,10 @@
         title: "Local da Festa 🎉"
       });
 
-      // Calcular distância do usuário até o local
+      // Cálculo de distância
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          function(position) {
+          function (position) {
             const userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             const festaLatLng = new google.maps.LatLng(localFesta.lat, localFesta.lng);
 
@@ -119,7 +114,7 @@
 
             document.getElementById("distance-info").innerText = `Você está a aproximadamente ${distanceInKm} km do local da festa.`;
           },
-          function() {
+          function () {
             document.getElementById("distance-info").innerText = "Não foi possível obter sua localização.";
           }
         );
@@ -129,10 +124,9 @@
     }
   </script>
 
-  <!-- Substitua SUA_CHAVE_API pela sua chave da Google Cloud -->
+  <!-- Substitua SUA_CHAVE_API pela sua chave real do Google Maps -->
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNeaRpjJVEDufpl6EzjgxknzNQ2v7ryU&libraries=geometry&callback=initMap">
   </script>
-
 </body>
 </html>
