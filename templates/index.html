@@ -11,12 +11,18 @@
   <meta property="og:url" content="https://juca.onrender.com" />
   <meta property="og:image" content="https://juca.onrender.com/static/og_image.png" />
   <meta property="og:type" content="website" />
+
   <style>
     #map {
       height: 300px;
       width: 100%;
       border-radius: 8px;
       margin-top: 20px;
+    }
+    .distance-info {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #555;
     }
   </style>
 </head>
@@ -45,27 +51,87 @@
     </form>
 
     <div id="map"></div>
+    <div class="distance-info" id="distance-info">Calculando distância...</div>
+
+    <a href="https://maps.app.goo.gl/FUZ2KFJRnWFp1Sok6" target="_blank" class="btn btn-outline-primary mt-2">
+      📍 Abrir no Google Maps
+    </a>
   </div>
 
   <script>
     function initMap() {
-      const localFesta = { lat: -23.732046, lng: -46.634026 }; // Coordenadas da Praça Goiás, 140
+      const localFesta = { lat: -22.788256628824712, lng : -43.39565625245985 };
+
       const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 17,
         center: localFesta,
+        styles: [
+          {
+            "elementType": "geometry",
+            "stylers": [{ "color": "#1d2c4d" }]
+          },
+          {
+            "elementType": "labels.text.fill",
+            "stylers": [{ "color": "#8ec3b9" }]
+          },
+          {
+            "elementType": "labels.text.stroke",
+            "stylers": [{ "color": "#1a3646" }]
+          },
+          {
+            "featureType": "administrative.country",
+            "elementType": "geometry.stroke",
+            "stylers": [{ "color": "#4b6878" }]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "labels.text.fill",
+            "stylers": [{ "color": "#94a5a6" }]
+          },
+          {
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [{ "color": "#304a7d" }]
+          },
+          {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [{ "color": "#0e1626" }]
+          }
+        ]
       });
 
       const marker = new google.maps.Marker({
         position: localFesta,
         map: map,
-        title: "Local da Festa 🎉",
+        title: "Local da Festa 🎉"
       });
+
+      // Calcular distância do usuário até o local
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            const festaLatLng = new google.maps.LatLng(localFesta.lat, localFesta.lng);
+
+            const distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(userLatLng, festaLatLng);
+            const distanceInKm = (distanceInMeters / 1000).toFixed(2);
+
+            document.getElementById("distance-info").innerText = `Você está a aproximadamente ${distanceInKm} km do local da festa.`;
+          },
+          function() {
+            document.getElementById("distance-info").innerText = "Não foi possível obter sua localização.";
+          }
+        );
+      } else {
+        document.getElementById("distance-info").innerText = "Seu navegador não suporta geolocalização.";
+      }
     }
   </script>
 
-  <!-- Substitua SUA_CHAVE_API pelo seu token real do Google Cloud -->
+  <!-- Substitua SUA_CHAVE_API pela sua chave da Google Cloud -->
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNeaRpjJVEDufpl6EzjgxknzNQ2v7ryU&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNeaRpjJVEDufpl6EzjgxknzNQ2v7ryU&libraries=geometry&callback=initMap">
   </script>
 
 </body>
