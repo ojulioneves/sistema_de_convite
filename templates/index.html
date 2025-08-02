@@ -19,6 +19,35 @@
       border-radius: 8px;
       margin-top: 20px;
     }
+    .thought-bubble {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  max-width: 300px;
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #495057;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+    }
+
+/* Setinha do balão */
+    .thought-bubble::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 20px;
+      width: 10px;
+      height: 10px;
+      background: #f8f9fa;
+      border-left: 1px solid #ced4da;
+      border-top: 1px solid #ced4da;
+      transform: rotate(45deg);
+    }
     .distance-info {
       margin-top: 10px;
       font-size: 0.95rem;
@@ -36,9 +65,22 @@
         <input type="text" class="form-control" id="nome" name="nome" required />
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3 position-relative">
         <label for="acompanhantes" class="form-label">Quantos acompanhantes?</label>
-        <input type="number" class="form-control" id="acompanhantes" name="acompanhantes" min="0" required />
+        <input
+          type="number"
+          class="form-control"
+          id="acompanhantes"
+          name="acompanhantes"
+          min="0"
+          required
+          placeholder=""
+        />
+
+        <!-- Balão de pensamento com a orientação -->
+        <div id="pensamento-convite" class="thought-bubble" style="display: none;">
+          Atenção: Os convites são individuais. Por isso, pedimos que você não leve acompanhantes, a menos que tenha sido combinado previamente com o aniversariante. Agradecemos a compreensão! 💛
+        </div>
       </div>
 
       <div class="mb-3 form-check">
@@ -128,5 +170,19 @@
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNeaRpjJVEDufpl6EzjgxknzNQ2v7ryU&libraries=geometry&callback=initMap">
   </script>
+  <script>
+  const campoAcompanhantes = document.getElementById("acompanhantes");
+  const pensamento = document.getElementById("pensamento-convite");
+
+  campoAcompanhantes.addEventListener("focus", () => {
+    campoAcompanhantes.placeholder = "Se estiver sozinho, digite 0 😉";
+    pensamento.style.display = "block";
+  });
+
+  campoAcompanhantes.addEventListener("blur", () => {
+    campoAcompanhantes.placeholder = "";
+    pensamento.style.display = "none";
+  });
+</script>
 </body>
 </html>
