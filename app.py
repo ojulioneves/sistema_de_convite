@@ -6,6 +6,7 @@ from flask import Response
 
 app = Flask(__name__)
 
+# Conexão com o MongoDB
 MONGO_URI = os.environ.get("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client["evento"]
@@ -15,13 +16,12 @@ collection = db["convidados"]
 def index():
     if request.method == "POST":
         nome = request.form.get("nome")
-        acompanhantes = request.form.get("acompanhantes")
         confirmacao = request.form.get("confirmacao")
 
-        if nome and acompanhantes is not None and confirmacao == "sim":
+        # Verifica se o nome foi enviado e se a caixa de confirmação está marcada
+        if nome and confirmacao == "sim":
             collection.insert_one({
                 "nome": nome.strip(),
-                "acompanhantes": int(acompanhantes),
                 "confirmado_em": datetime.now()
             })
             return redirect("/confirmado")
@@ -39,7 +39,8 @@ def admin():
         return Response("Acesso negado", status=401)
 
     convidados = list(collection.find({}, {"_id": 0}))
-    total_confirmados = sum(1 + int(c.get("acompanhantes", 0)) for c in convidados)
+    total_confirmados = len(convidados)
+
     return render_template("admin.html", convidados=convidados, total=total_confirmados)
 
 if __name__ == "__main__":
