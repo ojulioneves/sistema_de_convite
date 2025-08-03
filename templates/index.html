@@ -20,6 +20,35 @@
       margin-top: 20px;
     }
 
+    .thought-bubble {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 8px;
+      max-width: 300px;
+      background: #f8f9fa;
+      border: 1px solid #ced4da;
+      padding: 10px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #495057;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    .thought-bubble::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 20px;
+      width: 10px;
+      height: 10px;
+      background: #f8f9fa;
+      border-left: 1px solid #ced4da;
+      border-top: 1px solid #ced4da;
+      transform: rotate(45deg);
+    }
+
     .distance-info {
       margin-top: 10px;
       font-size: 0.95rem;
@@ -32,9 +61,12 @@
     <img src="{{ url_for('static', filename='convite_att.png') }}" class="img-fluid rounded shadow mb-4" alt="Convite" />
 
     <form method="POST" class="bg-white p-4 rounded shadow mx-auto" style="max-width: 400px;">
-      <div class="mb-3">
+      <div class="mb-3 position-relative">
         <label for="nome" class="form-label">Seu nome</label>
-        <input type="text" class="form-control" id="nome" name="nome" required />
+        <input type="text" class="form-control" id="nome" name="nome" required placeholder="" />
+        <div id="mensagem-nome" class="thought-bubble" style="display: none;">
+            Queridos mancebos! A confirmação (ou não) da presença é super importante (Prazo para confirmação: 10/08) para que a gente possa organizar tudo direitinho. Valeu demais!!
+          </div>
       </div>
 
       
@@ -125,5 +157,19 @@
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPNeaRpjJVEDufpl6EzjgxknzNQ2v7ryU&libraries=geometry&callback=initMap">
   </script>
+  <script>
+    const campoNome = document.getElementById("nome");
+    const mensagemNome = document.getElementById("mensagem-nome");
+
+    campoNome.addEventListener("focus", () => {
+      campoNome.placeholder = "Ex: João da Silva";
+      mensagemNome.style.display = "block";
+    });
+
+    campoNome.addEventListener("blur", () => {
+      campoNome.placeholder = "";
+      mensagemNome.style.display = "none";
+    });
+</script>
 </body>
 </html>
